@@ -44,15 +44,33 @@ int g_module_match = 0;
 #define MAP_SIZE 0x1000
 #define KERN_VER(a, b, c) (((a) << 16) + ((b) << 8) + (c))
 
+#ifdef ENABLE_MX6Q
 extern const module_t mx6q[];
+#endif
+#ifdef ENABLE_MX6DL
 extern const module_t mx6dl[];
+#endif
+#ifdef ENABLE_MX6SL
 extern const module_t mx6sl[];
+#endif
+#ifdef ENABLE_MX6SX
 extern const module_t mx6sx[];
+#endif
+#ifdef ENABLE_MX6UL
 extern const module_t mx6ul[];
+#endif
+#ifdef ENABLE_MX7D
 extern const module_t mx7d[];
+#endif
+#ifdef ENABLE_MX6ULL
 extern const module_t mx6ull[];
+#endif
+#ifdef ENABLE_MX7ULP
 extern const module_t mx7ulp[];
+#endif
+#ifdef ENABLE_MX6Q
 extern const module_t imx8mq7dvajz[];
+#endif
 
 char g_buffer[4096];
 
@@ -290,16 +308,28 @@ void parse_module(char *module, char *reg, char *field, int iswrite)
 
 			switch (r >> 12) {
 			case 0x63:
+#ifdef ENABLE_MX6Q
 				mx = mx6q;
 				printf("SOC is mx6q\n\n");
+#else
+				die("SOC is mx6q: not enabled\n\n");
+#endif
 				break;
 			case 0x61:
+#ifdef ENABLE_MX6DL
 				mx = mx6dl;
 				printf("SOC is mx6dl\n\n");
+#else
+				die("SOC is mx6dl: not enabled\n\n");
+#endif
 				break;
 			case 0x60:
+#ifdef ENABLE_MX6SL
 				mx = mx6sl;
 				printf("SOC is mx6sl\n\n");
+#else
+				die("SOC is mx6sl: not enabled\n\n");
+#endif
 				break;
 			default:
 				die("Unknown SOC\n\n");
@@ -324,25 +354,44 @@ void parse_module(char *module, char *reg, char *field, int iswrite)
 
 		if (!g_comp)
 			printf("SOC: %s\n", soc_name);
-
-		if (!strcmp(soc_name, "i.MX6Q"))
+        if (strlen(soc_name) == 0) //Dummy check to allow next else if
+			die("Unknown SOC\n");
+#ifdef ENABLE_MX6Q
+		else if (!strcmp(soc_name, "i.MX6Q"))
 			mx = mx6q;
+#endif
+#ifdef ENABLE_MX6DL
 		else if (!strcmp(soc_name, "i.MX6DL"))
 			mx = mx6dl;
+#endif
+#ifdef ENABLE_MX6SL
 		else if (!strcmp(soc_name, "i.MX6SL"))
 			mx = mx6sl;
+#endif
+#ifdef ENABLE_MX6SX
 		else if (!strcmp(soc_name, "i.MX6SX"))
 			mx = mx6sx;
+#endif
+#ifdef ENABLE_MX6UL
 		else if (!strcmp(soc_name, "i.MX6UL"))
 			mx = mx6ul;
+#endif
+#ifdef ENABLE_MX67D
 		else if (!strcmp(soc_name, "i.MX7D"))
 			mx = mx7d;
+#endif
+#ifdef ENABLE_MX6ULL
 		else if (!strcmp(soc_name, "i.MX6ULL"))
 			mx = mx6ull;
+#endif
+#ifdef ENABLE_MX7ULP
 		else if (!strcmp(soc_name, "i.MX7ULP"))
 			mx = mx7ulp;
+#endif
+#ifdef ENABLE_MX8MQ
 		else if (!strcmp(soc_name, "i.MX8MQ"))
 			mx = imx8mq7dvajz;
+#endif
 		else
 			die("Unknown SOC\n");
 	}
