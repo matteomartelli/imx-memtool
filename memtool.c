@@ -193,7 +193,9 @@ void parse_field(const module_t * mx, const reg_t * reg, char *field, int value)
 				       reg->name, f->name, f->lsb, f->msb,
 				       get_value(value, f->lsb, f->msb)
 				    );
+#if ENABLE_DESCRIPTIONS
 				printf("             %s\n", f->description);
+#endif
 			}
 		}
 		f++;
@@ -222,12 +224,16 @@ void parse_reg(const module_t * mx, const char *reg, char *field)
 
 		} else if (reg == NULL || *reg == 0 || strlen(reg) == 0 ||
 		    strncmp(sreg->name, reg, strlen(reg)) == 0 || *reg == '-') {
-			printf("  %s.%s Addr:0x%08X Value:0x%08X - %s\n",
+			printf("  %s.%s Addr:0x%08X Value:0x%08X",
 			       mx->name, sreg->name,
 			       mx->base_address + sreg->offset,
 			       readm(mx->base_address + sreg->offset,
-				     sreg->width),
-			       sreg->description);
+				     sreg->width));
+#ifdef ENABLE_DESCRIPTIONS
+           printf(" - %s\n", sreg->description);
+#else
+           printf("\n");
+#endif
 			if (!(reg && *reg == '-'))
 				parse_field(mx, sreg, field,
 					    readm(mx->base_address +
@@ -354,8 +360,10 @@ void parse_module(char *module, char *reg, char *field, int iswrite)
 
 		if (!g_comp)
 			printf("SOC: %s\n", soc_name);
-        if (strlen(soc_name) == 0) //Dummy check to allow next else if
-			die("Unknown SOC\n");
+
+        if (strlen(soc_name) == 0)
+            //Dummy check to allow next optional "else if" statement
+			die("Unknown SOC: empty SOC string\n");
 #ifdef ENABLE_MX6Q
 		else if (!strcmp(soc_name, "i.MX6Q"))
 			mx = mx6q;

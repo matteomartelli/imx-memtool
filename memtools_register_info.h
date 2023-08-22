@@ -36,7 +36,9 @@ typedef struct module {
  */
 typedef struct reg {
     const char * name; //!< Register name.
+#ifdef ENABLE_DESCRIPTIONS
     const char * description; //!< Short description of the register.
+#endif
     unsigned width; //!< Size in bytes of the register.
     unsigned offset; //!< Offset in bytes from the module's base address.
     bool is_readable; //!< True if the register can be read from.
@@ -50,7 +52,9 @@ typedef struct reg {
  */
 typedef struct field {
     const char * name; //!< Bitfield name.
+#ifdef ENABLE_DESCRIPTIONS
     const char * description; //!< Short description of the bitfield.
+#endif
     unsigned lsb; //!< Least significant bit of the bitfield.
     unsigned msb; //!< Most significant bit of the bitfield.
     bool is_readable; //!< True if the bitfield can be read. If a bitfield is not readable but is in a readable register, it usually means the bitfield value is always returned as zero.
@@ -61,6 +65,12 @@ typedef struct field {
 //!
 //! This array is terminated with a null entry.
 extern const module_t mx6[];
+
+#ifdef ENABLE_DESCRIPTIONS
+#define DESC(x) (x),
+#else
+#define DESC(x)
+#endif
 
 #endif // __MEMTOOLS_REGISTER_INFO_H__
 ////////////////////////////////////////////////////////////////////////////////

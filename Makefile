@@ -3,9 +3,13 @@ SOCS_UPPER = $(shell echo $(SOCS) | tr '[:lower:]' '[:upper:]')
 BIN = memtool
 OBJECTS = memtool.o
 OBJECTS += $(patsubst %, %_modules.o, $(SOCS))
-
+ENABLE_DESCRIPTIONS ?= yes
 CFLAGS = -Os
 CFLAGS += $(SOCS_UPPER:%=-DENABLE_%)
+
+ifeq ($(strip $(ENABLE_DESCRIPTIONS)), yes)
+CFLAGS += -DENABLE_DESCRIPTIONS
+endif
 
 all: $(OBJECTS)
 	$(CC) -o $(BIN) $(OBJECTS)
