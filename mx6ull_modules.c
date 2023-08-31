@@ -118533,7 +118533,7 @@ const module_t mx6ull[] =
     { "SDMABP",         1, 0x020ec000, 7,    hw_sdmabp },
     { "SDMACORE",       1, 0x020ec000, 21,   hw_sdmacore },
     { "SJC",            1, 0x00000000, 7,    hw_sjc },
-    { "SNVS",           1, 0x020b0000, 16,   hw_snvs },
+    { "SNVS",           1, 0x020cc000, 16,   hw_snvs },
     { "SPBA",           1, 0x0203c000, 32,   hw_spba },
     { "SPDIF",          1, 0x02004000, 18,   hw_spdif },
     { "SRC",            1, 0x020d8000, 15,   hw_src },
